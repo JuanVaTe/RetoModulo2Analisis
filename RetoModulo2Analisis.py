@@ -1,7 +1,7 @@
 # ==============================================================================================
 # Autor: Juan Carlos Varela Tellez
 # Fecha de inicio: 09/09/2022
-# Fecha de finalizacion: 09/09/2022
+# Fecha de finalizacion: 10/09/2022
 # ==============================================================================================
 #
 # ==============================================================================================
@@ -268,5 +268,101 @@ print("=======================================================\n")
 # de ahi lo empezaremos a afinar...
 
 decision_tree_2 = DecisionTreeClassifier(random_state=0,
-                                         max_depth=12,
-                                         ccp_alpha=0.00088584501076195)
+                                         ccp_alpha=10)
+decision_tree_2.fit(train_x_all, train_y_all)
+
+print("Arbol de decision podado (todos los datos) ======================================")
+print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_all, train_y_all))
+print("Puntaje de validacion:", decision_tree_2.score(test_x_all, test_y_all))
+print("=======================================================\n")
+
+decision_tree_2 = DecisionTreeClassifier(random_state=0,
+                                         ccp_alpha=10)
+decision_tree_2.fit(train_x_corr, train_y_corr)
+
+print("Arbol de decision podado (datos correlacionados) ======================================")
+print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_corr, train_y_corr))
+print("Puntaje de validacion:", decision_tree_2.score(test_x_corr, test_y_corr))
+print("=======================================================\n")
+
+# Este arbol de decision tiene un puntaje muy bajo, tanto en el entrenamiento
+# como en la validacion. Esto es por 3 razones:
+# - Sesgo alto: los valores predecidos estan muy lejos de los valores verdaderos
+# - Varianza baja: el modelo no se mueve lo suficiente para poder predecir de forma correcta los valores
+# - Underfitting: el modelo no es capaz de generalizar debido a su baja complejidad
+# En realidad, estas 3 caracteristicas se deben a que el modelo es muy simple.
+# Resolver esto es muy sencillo, solamente hay que aumentarle la complejidad al modelo
+
+# ¿Por que nuestro modelo es simple?
+# La razon principal es porque el valor alpha en un arbol de deicision le indica
+# al modelo cuando "podar" ramas, lo que significa que el modelo no alcanza una
+# convergencia porque no se le permitio crecer mas
+
+# ¿Cuales son los hiperparametros que puedo utilizar para subir la complejidad del arbol
+# de decision?
+# Normalmente los arboles de decision tienden a ser tan complejos que datos nuevos que llegan
+# para predecir los predice mal ya que el modelo se "memorizo" los datos de entrenamiento
+# Para aumentar la complejidad de este modelo podemos dejar que crezca lo maximo que
+# pueda quitandole el parametro 'ccp_alpha'
+# De la misma forma, quitandole el hiperparametro 'max_depth' puede dejar que el arbol crezca
+# lo que sea posible, lo cual tampoco es muy recomendable debido a los recursos
+# computacionales que necesita
+# Asimismo, quitandole el hiperparametro 'min_samples_leaf' puede ayudar a que su complejidad
+# aumente ya que este parametro limita la generacion de una hoja si es que no hay suficientes
+# datos en ese nodo, lo cual no deja generar el arbol completo
+
+# En resumen, si ambos puntajes son bajos, indica underfitting con las 3 caracteristicas
+# nombradas, asi que el plan de accion es aumentar la complejidad del modelo
+# Si el puntaje de entrenamiento es muy alto y el de validacion muy bajo, esto
+# indica overfitting, haciendo referencia a que el modelo "memoriza" los datos de entrenamiento
+# y cualquier registro nuevo no lo puede predecir de manera correcta ya que va a tender a dar
+# una respuesta del mismo modulo de entrenamiento.
+# Cuando ocurre overfitting es necesario bajar la complejidad del modelo, asi como usar mas datos
+# de entrenamiento para que pueda generalizar de mejor manera
+
+# Dejar que se haga el arbol de decision completo
+decision_tree_2 = DecisionTreeClassifier(random_state=0)
+decision_tree_2.fit(train_x_all, train_y_all)
+print("Arbol de decision completo (todos los datos) ======================================")
+print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_all, train_y_all))
+print("Puntaje de validacion:", decision_tree_2.score(test_x_all, test_y_all))
+print("=======================================================\n")
+
+decision_tree_2 = DecisionTreeClassifier(random_state=0)
+decision_tree_2.fit(train_x_corr, train_y_corr)
+
+print("Arbol de decision completo (datos correlacionados) ======================================")
+print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_corr, train_y_corr))
+print("Puntaje de validacion:", decision_tree_2.score(test_x_corr, test_y_corr))
+print("=======================================================\n")
+
+# En esta ocasion en especifico, nuestro modelo llego a un puntaje del 100% en ambos
+# modulos, lo cual indica que es basicamente un modelo perfecto
+# No hizo falta afinarlo mas, pero esto no significa que vaya a pasar siempre
+
+# EXTRA: ¿Por que obtuvo un puntaje perfecto, incluso cuando al principio se estaba
+# utilizando un modelo no optimizado para el problema?
+# Lo siguiente que voy a explicar es simplemente una teoria que pude formular de forma
+# empirica
+# Cuando checamos nuestra lista de correlaciones con respecto a nuestra variable dependiente
+# (queda recalcar que era si el hongo era comestible o no) note algo interesante,
+# la gran mayoria de las caracteristicas (mas de la mitad) contaban con un indice de
+# correlacion considerable (>0.2), lo cual indicaba que la mayor parte de los datos iban a dar
+# informacion importante al modelo y no iban a generar ruido ni a "contaminar" al modelo final
+# Pero ¿Por que fue esto?
+# Estas caracteristicas eran en su mayoria colores, formas y el olor del hongo, claro
+# ejemplo del fenomeno llamado 'aposematismo', lo cual se refiere a la advertencia de
+# un ser vivo, ante cualquier depredador potencial, que comerlo no vale la pena.
+# Esto lo podemos comparar con las ranas venenosas. La gran mayoria de las ranas venenosas
+# cuentan con colores brillantes, esto es porque le indican al depredador que no vale
+# la pena cazarlos y al final llegan a un acuerdo tacito "si tiene colores brillantes,
+# no lo comas"
+# Esto tambien pasa con los hongos, si algun hongo tiene un olor fetido, es la forma de
+# decir del hongo que no es comestible ya que "no vale la pena" pasar por el dolor de estomago
+# que te va a ocasionar. Tambien pasa cuando el hongo tiene un color brillante.
+# Es por esto que las correlaciones mas altas entre nuestra variable dependiente que se tuvieron
+# vinieron de saber si el hongo tenia un olor fetido o no, asi como varias caracteristicas sobre
+# los colores
+# Esta es la razon por la cual, de todos los modelos, el arbol de decision fue el mejor en utilizarse
+# ya que literalmente funciona asi (de forma simplificada): "si tiene olor fetido y color brillantes,
+# lo mas probable es que sea venenoso", lo cual en la vida real y en la naturaleza es completamente cierto.
