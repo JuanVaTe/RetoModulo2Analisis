@@ -352,7 +352,7 @@ print("=======================================================\n")
 # Pero ¿Por que fue esto?
 # Estas caracteristicas eran en su mayoria colores, formas y el olor del hongo, claro
 # ejemplo del fenomeno llamado 'aposematismo', lo cual se refiere a la advertencia de
-# un ser vivo, ante cualquier depredador potencial, que comerlo no vale la pena.
+# un ser vivo, ante cualquier depredador potencial, que comerlo no vale la pena. [1]
 # Esto lo podemos comparar con las ranas venenosas. La gran mayoria de las ranas venenosas
 # cuentan con colores brillantes, esto es porque le indican al depredador que no vale
 # la pena cazarlos y al final llegan a un acuerdo tacito "si tiene colores brillantes,
@@ -365,4 +365,6 @@ print("=======================================================\n")
 # los colores
 # Esta es la razon por la cual, de todos los modelos, el arbol de decision fue el mejor en utilizarse
 # ya que literalmente funciona asi (de forma simplificada): "si tiene olor fetido y color brillantes,
-# lo mas probable es que sea venenoso", lo cual en la vida real y en la naturaleza es completamente cierto.
+# lo mas probable es que sea venenoso", lo cual en la vida real y en la naturaleza es completamente cierto
+#
+# [1]- https://en.wikipedia.org/wiki/Aposematism
