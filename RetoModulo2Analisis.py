@@ -47,6 +47,7 @@ import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
 
 # Cambio de configuracion en pandas
 pd.set_option('display.max_rows', None)
@@ -180,9 +181,9 @@ mushroom_x_all = pd.concat([dummy_cap_shape, dummy_cap_surface, dummy_cap_color,
 # correlaciones entre nuestras caracteristicas y nuestra variable dependiente.
 
 correlation = pd.concat([mushroom_y, mushroom_x_all], axis=1).corr()
-#f, ax = plt.subplots(figsize=(20, 20))
-#sns.heatmap(correlation, annot=True)
-#plt.show()
+f, ax = plt.subplots(figsize=(20, 20))
+sns.heatmap(correlation, annot=True)
+plt.show()
 
 # Debido a la monstruosidad de matriz de correlacion que obtuvimos, investigue en internet
 # si es posible obtener los pares de valores con mayor correlacion.
@@ -236,25 +237,25 @@ train_x_corr, test_x_corr, train_y_corr, test_y_corr = train_test_split(mushroom
 # (El alfa fue copiado de forma manual ya que al fin y al cabo, el mejor arbol
 # de decision que se utilizo fue ese)
 
-decision_tree = DecisionTreeClassifier(random_state=0,
-                                       max_depth=12,
-                                       ccp_alpha=0.00088584501076195)
-decision_tree.fit(train_x_all, train_y_all)
+decision_tree_all = DecisionTreeClassifier(random_state=0,
+                                           max_depth=12,
+                                           ccp_alpha=0.00088584501076195)
+decision_tree_all.fit(train_x_all, train_y_all)
 
 print("Arbol de decision podado (todos los datos) ======================================")
-print("Puntaje de entrenamiento:", decision_tree.score(train_x_all, train_y_all))
-print("Puntaje de validacion:", decision_tree.score(test_x_all, test_y_all))
+print("Puntaje de entrenamiento:", decision_tree_all.score(train_x_all, train_y_all))
+print("Puntaje de validacion:", decision_tree_all.score(test_x_all, test_y_all))
 print("Alfa:", 0.00088584501076195)
 print("=======================================================\n")
 
-decision_tree = DecisionTreeClassifier(random_state=0,
-                                       max_depth=12,
-                                       ccp_alpha=0.00088584501076195)
-decision_tree.fit(train_x_corr, train_y_corr)
+decision_tree_corr = DecisionTreeClassifier(random_state=0,
+                                            max_depth=12,
+                                            ccp_alpha=0.00088584501076195)
+decision_tree_corr.fit(train_x_corr, train_y_corr)
 
 print("Arbol de decision podado (datos correlacionados) ======================================")
-print("Puntaje de entrenamiento:", decision_tree.score(train_x_corr, train_y_corr))
-print("Puntaje de validacion:", decision_tree.score(test_x_corr, test_y_corr))
+print("Puntaje de entrenamiento:", decision_tree_corr.score(train_x_corr, train_y_corr))
+print("Puntaje de validacion:", decision_tree_corr.score(test_x_corr, test_y_corr))
 print("Alfa:", 0.00088584501076195)
 print("=======================================================\n")
 
@@ -267,22 +268,22 @@ print("=======================================================\n")
 # Hagamos esto, haremos un arbol de decision que tengo un puntaje muy malo y
 # de ahi lo empezaremos a afinar...
 
-decision_tree_2 = DecisionTreeClassifier(random_state=0,
-                                         ccp_alpha=10)
-decision_tree_2.fit(train_x_all, train_y_all)
+decision_tree_2_all = DecisionTreeClassifier(random_state=0,
+                                             ccp_alpha=10)
+decision_tree_2_all.fit(train_x_all, train_y_all)
 
 print("Arbol de decision podado (todos los datos) ======================================")
-print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_all, train_y_all))
-print("Puntaje de validacion:", decision_tree_2.score(test_x_all, test_y_all))
+print("Puntaje de entrenamiento:", decision_tree_2_all.score(train_x_all, train_y_all))
+print("Puntaje de validacion:", decision_tree_2_all.score(test_x_all, test_y_all))
 print("=======================================================\n")
 
-decision_tree_2 = DecisionTreeClassifier(random_state=0,
-                                         ccp_alpha=10)
-decision_tree_2.fit(train_x_corr, train_y_corr)
+decision_tree_2_corr = DecisionTreeClassifier(random_state=0,
+                                              ccp_alpha=10)
+decision_tree_2_corr.fit(train_x_corr, train_y_corr)
 
 print("Arbol de decision podado (datos correlacionados) ======================================")
-print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_corr, train_y_corr))
-print("Puntaje de validacion:", decision_tree_2.score(test_x_corr, test_y_corr))
+print("Puntaje de entrenamiento:", decision_tree_2_corr.score(train_x_corr, train_y_corr))
+print("Puntaje de validacion:", decision_tree_2_corr.score(test_x_corr, test_y_corr))
 print("=======================================================\n")
 
 # Este arbol de decision tiene un puntaje muy bajo, tanto en el entrenamiento
@@ -321,24 +322,77 @@ print("=======================================================\n")
 # de entrenamiento para que pueda generalizar de mejor manera
 
 # Dejar que se haga el arbol de decision completo
-decision_tree_2 = DecisionTreeClassifier(random_state=0)
-decision_tree_2.fit(train_x_all, train_y_all)
+decision_tree_3_all = DecisionTreeClassifier(random_state=0)
+decision_tree_3_all.fit(train_x_all, train_y_all)
 print("Arbol de decision completo (todos los datos) ======================================")
-print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_all, train_y_all))
-print("Puntaje de validacion:", decision_tree_2.score(test_x_all, test_y_all))
+print("Puntaje de entrenamiento:", decision_tree_3_all.score(train_x_all, train_y_all))
+print("Puntaje de validacion:", decision_tree_3_all.score(test_x_all, test_y_all))
 print("=======================================================\n")
 
-decision_tree_2 = DecisionTreeClassifier(random_state=0)
-decision_tree_2.fit(train_x_corr, train_y_corr)
+decision_tree_3_corr = DecisionTreeClassifier(random_state=0)
+decision_tree_3_corr.fit(train_x_corr, train_y_corr)
 
 print("Arbol de decision completo (datos correlacionados) ======================================")
-print("Puntaje de entrenamiento:", decision_tree_2.score(train_x_corr, train_y_corr))
-print("Puntaje de validacion:", decision_tree_2.score(test_x_corr, test_y_corr))
+print("Puntaje de entrenamiento:", decision_tree_3_corr.score(train_x_corr, train_y_corr))
+print("Puntaje de validacion:", decision_tree_3_corr.score(test_x_corr, test_y_corr))
 print("=======================================================\n")
 
 # En esta ocasion en especifico, nuestro modelo llego a un puntaje del 100% en ambos
 # modulos, lo cual indica que es basicamente un modelo perfecto
 # No hizo falta afinarlo mas, pero esto no significa que vaya a pasar siempre
+
+# Para acabar, vamos a compararlo con nuestro "primer" modelo de arbol de decision
+# utilizando metricas de rendimiento y la matriz de confusion
+
+# Funcion para sacar metricas de rendimiento
+def metricas_rendimiento(matriz_confusion):
+    exactitud = (matriz_confusion[0][0] + matriz_confusion[1][1]) / (
+                matriz_confusion[0][0] + matriz_confusion[0][1] + matriz_confusion[1][0] + matriz_confusion[1][1])
+
+    try:
+        precision = matriz_confusion[0][0] / (matriz_confusion[0][0] + matriz_confusion[1][0])
+    except:
+        precision = 0
+
+    exhaustividad = matriz_confusion[0][0] / (matriz_confusion[0][0] + matriz_confusion[0][1])
+
+    try:
+        puntaje_F1 = (2 * precision * exhaustividad) / (precision + exhaustividad)
+    except:
+        puntaje_F1 = 0
+
+    return exactitud, precision, exhaustividad, puntaje_F1
+
+# Listado de modelos para ciclar la obtencion de metricas y matrices de confusion
+
+models = [['Arbol de decision 1 (Todos los datos)', 'all', decision_tree_2_all],
+          ['Arbol de decision 1 (Datos correlacionados)', 'corr', decision_tree_2_corr],
+          ['Arbol de decision 2 (Todos los datos)', 'all', decision_tree_3_all],
+          ['Arbol de decision 2 (Datos correlacionados)', 'corr', decision_tree_3_corr]]
+
+for trio in models:
+    if trio[1] == 'all':
+        conf_matrix = confusion_matrix(test_y_all, trio[2].predict(test_x_all))
+    else:
+        conf_matrix = confusion_matrix(test_y_corr, trio[2].predict(test_x_corr))
+
+    acc, prec, recall, F1_score = metricas_rendimiento(conf_matrix)
+
+    print("=============================================")
+    print(f"Metricas de rendimiento para modelo de {trio[0]}")
+    print("Matriz de confusion:")
+    print(conf_matrix)
+    print(f"Exactitud     : {acc}")
+    print(f"Precision     : {prec}")
+    print(f"Exhaustividad : {recall}")
+    print(f"Puntaje F1    : {F1_score}")
+    print("=============================================\n")
+
+# Aqui se puede observar que el mejor modelo sin duda es el Arbol de deicision 2
+# utilizando el data-set completo
+# Considerando que la gran mayoria de las variables independientes aportaban informacion
+# importante debido a su alta correlacion promedio, es normal que al utilizar todas
+# las caracteristicas se obtenga un resultado mas preciso.
 
 # EXTRA: ¿Por que obtuvo un puntaje perfecto, incluso cuando al principio se estaba
 # utilizando un modelo no optimizado para el problema?
@@ -364,7 +418,8 @@ print("=======================================================\n")
 # vinieron de saber si el hongo tenia un olor fetido o no, asi como varias caracteristicas sobre
 # los colores
 # Esta es la razon por la cual, de todos los modelos, el arbol de decision fue el mejor en utilizarse
-# ya que literalmente funciona asi (de forma simplificada): "si tiene olor fetido y color brillantes,
-# lo mas probable es que sea venenoso", lo cual en la vida real y en la naturaleza es completamente cierto
-#
+# ya que literalmente funciona a base de decisiones (como su nombre lo indica) y, tomando esas
+# pocas decisiones con mucho peso, es capaz de clasificar de forma correcta y predecir incluso
+# haciendo overfitting
+
 # [1]- https://en.wikipedia.org/wiki/Aposematism
