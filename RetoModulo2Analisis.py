@@ -324,6 +324,7 @@ print("=======================================================\n")
 # Dejar que se haga el arbol de decision completo
 decision_tree_3_all = DecisionTreeClassifier(random_state=0)
 decision_tree_3_all.fit(train_x_all, train_y_all)
+
 print("Arbol de decision completo (todos los datos) ======================================")
 print("Puntaje de entrenamiento:", decision_tree_3_all.score(train_x_all, train_y_all))
 print("Puntaje de validacion:", decision_tree_3_all.score(test_x_all, test_y_all))
