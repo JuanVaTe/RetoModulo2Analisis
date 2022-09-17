@@ -363,3 +363,7 @@ Considerando que la gran mayoria de las variables independientes aportaban infor
   
 Aunque en este proyecto haya sido asi, es muy importante entender la idea de que no todos los modelos son para todas las circunstancias y que es importante saber como afinar y reparar modelos cuyo rendimiento no es el que queremos. Conceptos como *sesgo*, *overfitting* y *afinacion de modelos* son cosas que tenemos que tener muy presentes para ser un verdadero cientifico de datos o ingeniero en Machine Learning.
   
+#### Mejoras a partir de la retroalimentacion
+
+- Creacion de documentacion en README.md
+- Creacion de documentacion en .pdf
