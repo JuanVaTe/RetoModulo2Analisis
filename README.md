@@ -212,6 +212,7 @@ Podemos observar que hay una gran variedad de correlaciones que van desde 0.016 
 Para el preprocesamiento de datos, vamos a quedarnos con 2 data-sets de variables independientes:  
 - Data-set con solamente las caracteristicas mas correlacionadas (0.5 o mas en indice de correlacion)  
 - Data-set con todas las caracteristicas  
+  
 Como se hizo con el ejercicio anterior, esto nos va a dar mas espacio de experimentacion cuando empecemos a afinar nuestro modelo.  
   
 Despues toca escalar todos los datos para empezar a experimentar con los modelos  
